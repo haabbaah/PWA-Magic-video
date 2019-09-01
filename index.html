@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Magic Video</title>
+
+	<link rel="manifest" href="manifest.json">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="application-name" content="Test">
+	<meta name="apple-mobile-web-app-title" content="Test">
+	<meta name="msapplication-starturl" content="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<link rel="icon" type="image/png" sizes="512x512" href="images/icons/berries.png">
+	<link rel="apple-touch-icon" type="image/png" sizes="512x512" href="images/icons/berries.png">
+
+	<link rel="stylesheet" href="style/style.css">
+</head>
+
+<body>
+
+	<div class="first-screen">
+		<img class="start-btn" src="images/play.png" alt="">
+
+
+
+		<div class="menu">
+			<button class="nav-tgl" type="button" aria-label="toggle menu">
+				<span aria-hidden="true"></span>
+			</button>
+		</div>
+
+		<div class="option d-n">
+			<div class="version">
+				Версия 1.0
+			</div>
+
+			<div class="btn add-scene">
+				+ новая сцена
+			</div>
+
+			<div class="scene">
+				<div class="scene-option">
+					<div class="scene-move">
+						<div class="btn up-scene">
+							ПОДНЯТЬ
+						</div>
+						<div class="btn down-scene">
+							ОПУСТИТЬ
+						</div>
+					</div>
+					<div class="btn del-scene">
+						УДАЛИТЬ
+					</div>
+				</div>
+				<div class="item">
+					START
+					<p>URL:</p>
+					<input type="text" placeholder="https://www.youtube.com">
+				</div>
+				<div class="item">
+					<img src="images/option/01.png" alt="">
+					<p>URL:</p>
+					<input type="text" placeholder="https://www.youtube.com">
+				</div>
+				<div class="item">
+					<img src="images/option/02.png" alt="">
+					<p>URL:</p>
+					<input type="text" placeholder="https://www.youtube.com">
+				</div>
+				<div class="item">
+					<img src="images/option/03.png" alt="">
+					<p>URL:</p>
+					<input type="text" placeholder="https://www.youtube.com">
+				</div>
+				<div class="item">
+					<img src="images/option/04.png" alt="">
+					<p>URL:</p>
+					<input type="text" placeholder="https://www.youtube.com">
+				</div>
+				<div class="item">
+					<img src="images/option/05.png" alt="">
+					<p>URL:</p>
+					<input type="text" placeholder="https://www.youtube.com">
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+
+	<section class="youtube d-n">
+		<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/Uqx1FkzQjwk?controls=0" frameborder="0"
+			allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	</section>
+
+
+	<script src="script/sw-toolbox.js"></script>
+	<script src="script/script.js"></script>
+</body>
+
+</html>

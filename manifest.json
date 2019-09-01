@@ -1,0 +1,14 @@
+{
+	"name": "Magic Video",
+	"short_name": "Magic",
+	"lang": "ru-RU",
+	"start_url": "https://haabbaah.github.io/PWA_test/",
+	"display": "standalone",
+	"icons": [
+		{
+			"src": "images/icons/berries.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	]
+}
