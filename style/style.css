@@ -46,6 +46,7 @@ img {
 	text-transform: uppercase;
 	border-radius: .5rem;
 	cursor: pointer;
+	text-align: center;
 }
 
 
@@ -93,8 +94,17 @@ img {
 .option .scene .scene-option {
 	display: flex;
 	justify-content: space-between;
+	align-items: flex-start;
 	width: 100%;
 	margin-bottom: 2rem;
+}
+
+.option .scene .btn {
+	font-size: 90%;
+}
+
+.option .scene .scene-move .btn:first-child {
+	margin-bottom: 1rem;
 }
 
 .option .scene .item {
@@ -120,6 +130,18 @@ img {
 
 .option .scene .item input {
 	width: 100%;
+}
+
+.option .scene .item .del-url {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.9rem;
+	height: 1.4rem;
+	margin-left: .5rem;
+	line-height: 1;
+	background-color: rgb(255, 49, 49);
+	border-radius: .2rem;
 }
 
 
