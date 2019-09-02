@@ -2,7 +2,7 @@
 	"name": "Magic Video",
 	"short_name": "Magic",
 	"lang": "ru-RU",
-	"start_url": "https://haabbaah.github.io/PWA_test/",
+	"start_url": "https://haabbaah.github.io/PWA-Magic-video/",
 	"display": "standalone",
 	"icons": [
 		{
