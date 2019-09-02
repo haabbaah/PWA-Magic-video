@@ -130,17 +130,6 @@ img {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 .nav-tgl {
 	display: inline-block;
 	cursor: pointer;
@@ -241,6 +230,83 @@ img {
 }
 
 /* menu END*/
+
+
+
+
+
+
+.video-screen {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+}
+
+.video-screen video {
+	width: 100%;
+	height: auto;
+}
+
+.video-wrapper {
+	position: relative;
+}
+
+.video-wrapper .play-video {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 30%;
+}
+
+.video-wrapper .play-video .hidden-btn {
+	position: absolute;
+	width: 40%;
+	height: 40%;
+	background-color: rgb(230, 136, 136);
+	opacity: 0;
+}
+
+.video-wrapper .play-video .top-left {
+	position: absolute;
+	top: -10%;
+	left: -10%;
+}
+
+.video-wrapper .play-video .top-right {
+	position: absolute;
+	top: -10%;
+	right: -10%;
+}
+
+.video-wrapper .play-video .bottom-left {
+	position: absolute;
+	bottom: -10%;
+	left: -10%;
+}
+
+.video-wrapper .play-video .bottom-right {
+	position: absolute;
+	bottom: -10%;
+	right: -10%;
+}
+
+.video-wrapper .play-video .center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+
+
+
+
+
+
+
+
 
 
 .d-n {
