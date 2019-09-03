@@ -76,13 +76,23 @@ startBtn.addEventListener('click', event => {
 /* video */
 
 const playBtn = document.querySelector('.play-btn');
+
 const topLeft = document.querySelector('.top-left');
 const topRight = document.querySelector('.top-right');
 const bottomLeft = document.querySelector('.bottom-left');
 const bottomRight = document.querySelector('.bottom-right');
 const center = document.querySelector('.center');
 
-topLeft.addEventListener('click', event => {
+
+
+document.addEventListener('touchstart', (event) => { // делегирование
+	let playBtn = event.target.closest('.video-play'); //video-play - элемент на который тапнули
+	if (!playBtn) return;
+	//код
+}, false);
+
+
+/* topLeft.addEventListener('click', event => {
 	video.src = 'video/01.mp4';
 	playVideo();
 });
@@ -105,7 +115,7 @@ bottomRight.addEventListener('click', event => {
 center.addEventListener('click', event => {
 	video.src = 'video/05.mp4';
 	playVideo();
-});
+}); */
 
 function playVideo() {
 	playBtn.classList.add('d-n');
@@ -118,3 +128,37 @@ function endedVideo() {
 }
 
 /* video END*/
+
+
+
+
+/* FileReader */
+
+let inputs = document.querySelectorAll('.inputfile');
+
+for (const input of inputs) {
+	let label = input.nextElementSibling;
+	input.addEventListener('change', (event) => {
+		let file = input.files[0];
+		label.innerHTML = file.name;
+
+
+		let reader = new FileReader();
+
+		reader.onloadend = function () {
+			video.src = reader.result;
+		}
+
+		if (file) {
+			reader.readAsDataURL(file);
+		} else {
+			video.src = "";
+		}
+
+		console.log(video.src);
+
+
+	});
+}
+
+/* FileReader END*/
