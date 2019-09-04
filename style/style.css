@@ -49,6 +49,21 @@ img {
 	text-align: center;
 }
 
+.back-btn {
+	border: .3rem solid #000;
+	border-radius: 50%;
+	padding: .5rem;
+}
+
+.back-first-screen {
+	position: absolute;
+	top: 3vw;
+	left: 3vw;
+	width: 20%;
+	max-width: 4rem;
+	opacity: .7;
+}
+
 
 /* menu */
 

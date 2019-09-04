@@ -37,7 +37,7 @@
 			</button>
 		</div>
 
-		<div class="option">
+		<div class="option d-n">
 			<div class="version">
 				Версия 1.0
 			</div>
@@ -46,7 +46,7 @@
 				+ новая сцена
 			</div>
 
-			<div class="scene">
+			<!-- 	<div class="scene" data-scene-counter="0">
 				<div class="scene-option">
 					<div class="scene-move">
 						<div class="btn up-scene">
@@ -60,45 +60,43 @@
 						УДАЛИТЬ
 					</div>
 				</div>
-				<div class="item">
-					<p>
-						 START
-					</p>
-					<input type="file" name="file" id="file-1" class="inputfile" />
+				<div class="item" data-item="0">
+					<img src="images/menu/00.png">
+					<input type="file" name="file" id="file-1" class="inputfile" accept="video/*" />
 					<label for="file-1">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
-				<div class="item">
-					<img src="images/option/01.png" alt="">
-					<input type="file" name="file" id="file-2" class="inputfile" />
+				<div class="item"  data-item="1">
+					<img src="images/menu/01.png">
+					<input type="file" name="file" id="file-2" class="inputfile" accept="video/*"/>
 					<label for="file-2">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
-				<div class="item">
-					<img src="images/option/02.png" alt="">
-					<input type="file" name="file" id="file-3" class="inputfile" />
+				<div class="item"  data-item="2">
+					<img src="images/menu/02.png">
+					<input type="file" name="file" id="file-3" class="inputfile" accept="video/*"/>
 					<label for="file-3">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
-				<div class="item">
-					<img src="images/option/03.png" alt="">
-					<input type="file" name="file" id="file-4" class="inputfile" />
+				<div class="item"  data-item="3">
+					<img src="images/menu/03.png">
+					<input type="file" name="file" id="file-4" class="inputfile" accept="video/*"/>
 					<label for="file-4">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
-				<div class="item">
-					<img src="images/option/04.png" alt="">
-					<input type="file" name="file" id="file-5" class="inputfile" />
+				<div class="item"  data-item="4">
+					<img src="images/menu/04.png">
+					<input type="file" name="file" id="file-5" class="inputfile" accept="video/*"/>
 					<label for="file-5">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
-				<div class="item">
-					<img src="images/option/05.png" alt="">
-					<input type="file" name="file" id="file-6" class="inputfile" />
+				<div class="item"  data-item="5">
+					<img src="images/menu/05.png">
+					<input type="file" name="file" id="file-6" class="inputfile" accept="video/*"/>
 					<label for="file-6">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
-			</div>
+			</div> -->
 
 
 		</div>
@@ -109,6 +107,8 @@
 
 
 	<section class="video-screen d-n">
+		<img class="back-btn back-first-screen" src="images/back.png" alt="">
+
 		<div class="video-wrapper">
 			<video class="main-video" src="video/start1.mp4" playsinline></video>
 			<div class="play-video">
@@ -124,6 +124,7 @@
 
 
 	<script src="script/sw-toolbox.js"></script>
+	<script src="script/pep.js"></script>
 	<script src="script/script.js"></script>
 </body>
 
