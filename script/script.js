@@ -53,11 +53,111 @@ let addSceneBtn = document.querySelector('.add-scene'); //Кнопка доба�
 let optionMenu = document.querySelector('.option'); //Окно главного меню
 let sceneCounter = 0; //Итератор добавляется в дата- для сцены
 let videoCounter = 0; //Для какой сцены нужно запустить видео
+let labelCounter = 0; //Итератор для инпута и лейбла
 let sceneArr = []; //Массив с экземплярами класса Scene
 let inputs = null; //Все импуты с файлами
 
 const playBtn = document.querySelector('.play-btn'); //Кнопка плей на видео
 
+//params = {}; // Параметры для сохранения в localStorage
+
+
+
+
+
+/* localStorage */
+/* getSaveParams();
+
+function saveParams() {
+
+	params.sceneArr = sceneArr;
+	params.sceneCounter = sceneCounter;
+
+	let serialParams = JSON.stringify(params);
+	localStorage.setItem("params", serialParams);
+}
+
+function getSaveParams() {
+	let paramsFromStorage = JSON.parse(localStorage.getItem("params"));
+	if (!paramsFromStorage) {
+		return;
+	}
+	sceneArr = [];
+	sceneArr = paramsFromStorage.sceneArr;
+	sceneCounter = paramsFromStorage.sceneCounter;
+	autoCreateScene();
+} */
+
+/* localStorage END*/
+
+
+
+
+
+
+
+
+/* IndexedDB */
+
+
+
+
+
+
+
+
+/* let openRequest = indexedDB.open('store');
+
+openRequest.onupgradeneeded = function () {
+	let db = openRequest.result;
+	if (!db.objectStoreNames.contains('params')) {
+		db.createObjectStore('params', {
+			keyPath: 'id'
+		});
+	}
+
+
+	let transaction = db.transaction("params", "readwrite");
+	let params = transaction.objectStore("params");
+
+	let param = {
+		id: 'js',
+		price: 10,
+		created: new Date()
+	};
+	let request = params.add(param);
+
+	request.onsuccess = function () {
+		console.log("Параметр добавлен в хранилище", request.result);
+	};
+
+	request.onerror = function () {
+		console.log("Ошибка", request.error);
+	};
+
+
+};
+
+openRequest.onerror = function () {
+	console.error("Error", openRequest.error);
+};
+
+openRequest.onsuccess = function () {
+	let db = openRequest.result;
+	db.onversionchange = function () {
+		db.close();
+		alert("База данных устарела, пожалуста, перезагрузите страницу.");
+	};
+
+
+	db.createObjectStore('params', {
+		keyPath: 'id'
+	});
+
+};
+ */
+
+/* IndexedDB END*/
 
 
 
@@ -70,6 +170,7 @@ btn.addEventListener('click', event => {
 	} else {
 		menu.classList.remove('active');
 		optionMenu.classList.add('d-n');
+		saveParams();
 	}
 });
 /* menu END*/
@@ -128,22 +229,22 @@ const center = document.querySelector('.center');
 			let hiddenBtn = event.target.closest('.hidden-btn');
 			if (!hiddenBtn) return;
 			if (hiddenBtn.classList.contains('top-left')) {
-				video.src = 'video/01.mp4';
+				video.src = sceneArr[videoCounter].topLeftUrl;
 				playVideo();
 			} else if (hiddenBtn.classList.contains('top-right')) {
-				video.src = 'video/02.mp4';
+				video.src = sceneArr[videoCounter].topRightUrl;
 				playVideo();
 			} else if (hiddenBtn.classList.contains('bottom-left')) {
-				video.src = 'video/03.mp4';
+				video.src = sceneArr[videoCounter].bottomLeftUrl;
 				playVideo();
 			} else if (hiddenBtn.classList.contains('bottom-right')) {
-				video.src = 'video/04.mp4';
+				video.src = sceneArr[videoCounter].bottomRightUrl;
 				playVideo();
 			} else if (hiddenBtn.classList.contains('center')) {
-				video.src = 'video/05.mp4';
+				video.src = sceneArr[videoCounter].centerUrl;
 				playVideo();
 			}
-
+			videoCounter++;
 		}
 	}, false);
 }
@@ -151,11 +252,18 @@ const center = document.querySelector('.center');
 function playVideo() {
 	playBtn.classList.add('d-n');
 	video.play();
+	playNextScene();
+}
+
+function playNextScene() {
+	video.src = sceneArr[videoCounter].startUrl;
+	video.play();
 	video.addEventListener('ended', endedVideo);
 }
 
 function endedVideo() {
 	playBtn.classList.remove('d-n');
+	video.removeEventListener('ended', endedVideo);
 }
 
 /* video END*/
@@ -170,19 +278,31 @@ class Scene {
 	constructor({
 		number = 0,
 		startUrl = 'video/start1.mp4',
+		startName = '',
 		topLeftUrl = 'video/01.mp4',
-		topRighttUrl = 'video/02.mp4',
+		topLeftName = '',
+		topRightUrl = 'video/02.mp4',
+		topRightName = '',
 		bottomLeftUrl = 'video/03.mp4',
+		bottomLeftName = '',
 		bottomRightUrl = 'video/04.mp4',
+		bottomRightName = '',
 		centerUrl = 'video/05.mp4',
+		centerName = '',
 	}) {
 		this.number = number;
 		this.startUrl = startUrl;
+		this.startName = startName;
 		this.topLeftUrl = topLeftUrl;
-		this.topRighttUrl = topRighttUrl;
+		this.topLeftName = topLeftName;
+		this.topRightUrl = topRightUrl;
+		this.topRightName = topRightName;
 		this.bottomLeftUrl = bottomLeftUrl;
+		this.bottomLeftName = bottomLeftName;
 		this.bottomRightUrl = bottomRightUrl;
+		this.bottomRightName = bottomRightName;
 		this.centerUrl = centerUrl;
+		this.centerName = centerName;
 	}
 }
 
@@ -208,6 +328,72 @@ class Scene {
 }
 
 
+function autoCreateScene() {
+	for (const scene of sceneArr) {
+		//let counter = sceneCounter++;
+		let code = `
+	<div class="scene" data-scene-counter="${scene.number}">
+				<div class="scene-option">
+					<div class="scene-move">
+						<div class="btn up-scene">
+							ПОДНЯТЬ
+						</div>
+						<div class="btn down-scene">
+							ОПУСТИТЬ
+						</div>
+					</div>
+					<div class="btn del-scene">
+						УДАЛИТЬ
+					</div>
+				</div>
+				<div class="item" data-item="0">
+					<img src="images/menu/00.png">
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*" />
+					<label for="file-${labelCounter}">${scene.startName ? scene.startName : 'Загрузить видео'}</label>
+					<div class="del-url">×</div>
+				</div>
+				<div class="item"  data-item="1">
+					<img src="images/menu/01.png">
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*"/>
+					<label for="file-${labelCounter}">${scene.topLeftName ? scene.topLeftName : 'Загрузить видео'}</label>
+					<div class="del-url">×</div>
+				</div>
+				<div class="item"  data-item="2">
+					<img src="images/menu/02.png">
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*"/>
+					<label for="file-${labelCounter}">${scene.topRightName ? scene.topRightName : 'Загрузить видео'}</label>
+					<div class="del-url">×</div>
+				</div>
+				<div class="item"  data-item="3">
+					<img src="images/menu/03.png">
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*"/>
+					<label for="file-${labelCounter}">${scene.bottomLeftName ? scene.bottomLeftName : 'Загрузить видео'}</label>
+					<div class="del-url">×</div>
+				</div>
+				<div class="item"  data-item="4">
+					<img src="images/menu/04.png">
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*"/>
+					<label for="file-${labelCounter}">${scene.bottomRightName ? scene.bottomRightName : 'Загрузить видео'}</label>
+					<div class="del-url">×</div>
+				</div>
+				<div class="item"  data-item="5">
+					<img src="images/menu/05.png">
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*"/>
+					<label for="file-${labelCounter}">${scene.centerName ? scene.centerName : 'Загрузить видео'}</label>
+					<div class="del-url">×</div>
+				</div>
+			</div>
+			</div>
+		`;
+
+		optionMenu.insertAdjacentHTML('beforeend', code);
+		inputs = document.querySelectorAll('.inputfile');
+		startFileReader(inputs);
+	}
+	//createScene();
+}
+
+
 function createScene() { //Создание сцены
 	let counter = sceneCounter++;
 	let code = `
@@ -227,38 +413,38 @@ function createScene() { //Создание сцены
 				</div>
 				<div class="item" data-item="0">
 					<img src="images/menu/00.png">
-					<input type="file" name="file" id="file-1" class="inputfile" accept="video/*" />
-					<label for="file-1">Загрузить видео</label>
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*" />
+					<label for="file-${labelCounter}">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
 				<div class="item"  data-item="1">
 					<img src="images/menu/01.png">
-					<input type="file" name="file" id="file-2" class="inputfile" accept="video/*"/>
-					<label for="file-2">Загрузить видео</label>
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*"/>
+					<label for="file-${labelCounter}">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
 				<div class="item"  data-item="2">
 					<img src="images/menu/02.png">
-					<input type="file" name="file" id="file-3" class="inputfile" accept="video/*"/>
-					<label for="file-3">Загрузить видео</label>
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*"/>
+					<label for="file-${labelCounter}">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
 				<div class="item"  data-item="3">
 					<img src="images/menu/03.png">
-					<input type="file" name="file" id="file-4" class="inputfile" accept="video/*"/>
-					<label for="file-4">Загрузить видео</label>
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*"/>
+					<label for="file-${labelCounter}">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
 				<div class="item"  data-item="4">
 					<img src="images/menu/04.png">
-					<input type="file" name="file" id="file-5" class="inputfile" accept="video/*"/>
-					<label for="file-5">Загрузить видео</label>
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*"/>
+					<label for="file-${labelCounter}">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
 				<div class="item"  data-item="5">
 					<img src="images/menu/05.png">
-					<input type="file" name="file" id="file-6" class="inputfile" accept="video/*"/>
-					<label for="file-6">Загрузить видео</label>
+					<input type="file" name="file" id="file-${++labelCounter}" class="inputfile" accept="video/*"/>
+					<label for="file-${labelCounter}">Загрузить видео</label>
 					<div class="del-url">×</div>
 				</div>
 			</div>
@@ -269,11 +455,17 @@ function createScene() { //Создание сцены
 	sceneArr.push(new Scene({
 		number: counter,
 		startUrl: '',
+		startName: '',
 		topLeftUrl: '',
-		topRighttUrl: '',
+		topLeftName: '',
+		topRightUrl: '',
+		topRightName: '',
 		bottomLeftUrl: '',
+		bottomLeftName: '',
 		bottomRightUrl: '',
+		bottomRightName: '',
 		centerUrl: '',
+		centerName: '',
 	}));
 
 	inputs = document.querySelectorAll('.inputfile');
@@ -321,29 +513,39 @@ function startFileReader(inputs) {
 			let file = input.files[0];
 			label.innerHTML = file.name;
 
+
+
 			let reader = new FileReader();
 
-			reader.onloadend = () => {
+			reader.onloadend = (event) => {
+				//console.log(reader.result);
+				//src = event.target.result;
 				src = reader.result;
-
+				//src = Base64.decode(src);
 				switch (itemData) {
 					case '0':
 						scene.startUrl = src;
+						scene.startName = file.name;
 						break;
 					case '1':
 						scene.topLeftUrl = src;
+						scene.topLeftName = file.name;
 						break;
 					case '2':
-						scene.topRighttUrl = src;
+						scene.topRightUrl = src;
+						scene.topRightName = file.name;
 						break;
 					case '3':
 						scene.bottomLeftUrl = src;
+						scene.bottomLeftName = file.name;
 						break;
 					case '4':
 						scene.bottomRightUrl = src;
+						scene.bottomRightName = file.name;
 						break;
 					case '5':
 						scene.centerUrl = src;
+						scene.centerName = file.name;
 						break;
 					default:
 						break;
