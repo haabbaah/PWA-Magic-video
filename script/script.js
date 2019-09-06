@@ -59,7 +59,7 @@ let inputs = null; //Все импуты с файлами
 
 const playBtn = document.querySelector('.play-btn'); //Кнопка плей на видео
 
-//params = {}; // Параметры для сохранения в localStorage
+let params = {}; // Параметры для сохранения в localStorage
 
 
 
@@ -95,67 +95,74 @@ function getSaveParams() {
 
 
 
-
-
 /* IndexedDB */
 
 
+import {
+	get,
+	set
+} from 'https://cdn.jsdelivr.net/npm/idb-keyval@3/dist/idb-keyval.mjs';
+
+
+import {
+	openDB,
+	deleteDB,
+	wrap,
+	unwrap
+} from 'https://unpkg.com/idb?module';
 
 
 
 
 
-
-/* let openRequest = indexedDB.open('store');
-
-openRequest.onupgradeneeded = function () {
-	let db = openRequest.result;
-	if (!db.objectStoreNames.contains('params')) {
-		db.createObjectStore('params', {
-			keyPath: 'id'
-		});
+const dbPromise = openDB('keyval-store', 1, {
+	upgrade(db) {
+		db.createObjectStore('keyval');
 	}
+});
 
-
-	let transaction = db.transaction("params", "readwrite");
-	let params = transaction.objectStore("params");
-
-	let param = {
-		id: 'js',
-		price: 10,
-		created: new Date()
-	};
-	let request = params.add(param);
-
-	request.onsuccess = function () {
-		console.log("Параметр добавлен в хранилище", request.result);
-	};
-
-	request.onerror = function () {
-		console.log("Ошибка", request.error);
-	};
-
-
+const idbKeyval = {
+	async get(key) {
+		return (await dbPromise).get('keyval', key);
+	},
+	async set(key, val) {
+		return (await dbPromise).put('keyval', val, key);
+	},
+	async delete(key) {
+		return (await dbPromise).delete('keyval', key);
+	},
+	async clear() {
+		return (await dbPromise).clear('keyval');
+	},
+	async keys() {
+		return (await dbPromise).getAllKeys('keyval');
+	},
 };
 
-openRequest.onerror = function () {
-	console.error("Error", openRequest.error);
-};
-
-openRequest.onsuccess = function () {
-	let db = openRequest.result;
-	db.onversionchange = function () {
-		db.close();
-		alert("База данных устарела, пожалуста, перезагрузите страницу.");
-	};
 
 
-	db.createObjectStore('params', {
-		keyPath: 'id'
-	});
+async function saveParams() {
+	params.sceneArr = sceneArr;
+	params.sceneCounter = sceneCounter;
+	let serialParams = JSON.stringify(params);
+	await idbKeyval.set('params', serialParams);
+}
 
-};
- */
+
+async function getSaveParams() {
+	let val = await idbKeyval.get('params');
+	let paramsFromStorage = JSON.parse(val);
+	if (!paramsFromStorage) {
+		return;
+	}
+	sceneArr = [];
+	sceneArr = paramsFromStorage.sceneArr;
+	sceneCounter = paramsFromStorage.sceneCounter;
+	autoCreateScene();
+}
+
+
+getSaveParams();
 
 /* IndexedDB END*/
 
@@ -174,6 +181,58 @@ btn.addEventListener('click', event => {
 	}
 });
 /* menu END*/
+
+
+
+
+
+
+
+function openScreen(btns, thisScreens, nextScreens, cssClass = 'd-n') { //Переход к нужному окну с закрытием настоящего
+
+	if (typeof (btns) === 'string') {
+		btns = document.querySelectorAll(btns);
+	}
+	if (typeof (thisScreens) === 'string') {
+		thisScreens = document.querySelectorAll(thisScreens);
+	}
+	if (typeof (nextScreens) === 'string') {
+		nextScreens = document.querySelectorAll(nextScreens);
+	}
+
+	for (const btn of btns) {
+		let coords = {};
+
+		btn.addEventListener('pointerdown', (event) => {
+			coords.x = event.pageX;
+			coords.y = event.pageY;
+		}, false);
+
+		btn.addEventListener('pointerup', (event) => {
+			if (coords.x === event.pageX || coords.y === event.pageY) {
+				for (const thisScreen of thisScreens) {
+					if (!thisScreen.classList.contains(cssClass)) {
+						thisScreen.classList.add(cssClass);
+					}
+				}
+
+				for (const nextScreen of nextScreens) {
+					if (nextScreen.classList.contains(cssClass)) {
+						nextScreen.classList.remove(cssClass);
+					}
+				}
+			}
+		}, false);
+	}
+}
+
+
+openScreen('.back-first-screen', '.video-screen', '.first-screen');//Возврат из окна с видео в начальное окно
+
+
+
+
+
 
 
 /* firstScreen */
