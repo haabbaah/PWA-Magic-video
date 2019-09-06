@@ -188,7 +188,7 @@ btn.addEventListener('click', event => {
 
 
 
-function openScreen(btns, thisScreens, nextScreens, cssClass = 'd-n') { //Переход к нужному окну с закрытием настоящего
+function openScreen(btns, thisScreens, nextScreens, cssClass = 'd-n', callback) { //Переход к нужному окну с закрытием настоящего
 
 	if (typeof (btns) === 'string') {
 		btns = document.querySelectorAll(btns);
@@ -223,12 +223,16 @@ function openScreen(btns, thisScreens, nextScreens, cssClass = 'd-n') { //Пер
 				}
 			}
 		}, false);
+
+		callback();
 	}
 }
 
+function clearVideoCunter() {
+	videoCounter = 0;
+}
 
-openScreen('.back-first-screen', '.video-screen', '.first-screen');//Возврат из окна с видео в начальное окно
-
+openScreen('.back-first-screen', '.video-screen', '.first-screen', 'd-n', clearVideoCunter); //Возврат из окна с видео в начальное окно
 
 
 
@@ -257,7 +261,7 @@ function startDefaultVideo() {
 
 function startSelfVideo() {
 	video.src = sceneArr[0].startUrl;
-	playVideo();
+	firstPlayVideo();
 }
 
 
@@ -288,6 +292,7 @@ const center = document.querySelector('.center');
 			let hiddenBtn = event.target.closest('.hidden-btn');
 			if (!hiddenBtn) return;
 			if (hiddenBtn.classList.contains('top-left')) {
+				console.log(videoCounter);
 				video.src = sceneArr[videoCounter].topLeftUrl;
 				playVideo();
 			} else if (hiddenBtn.classList.contains('top-right')) {
@@ -308,21 +313,43 @@ const center = document.querySelector('.center');
 	}, false);
 }
 
-function playVideo() {
+function firstPlayVideo() {
 	playBtn.classList.add('d-n');
 	video.play();
-	playNextScene();
+	video.addEventListener('ended', firstEndedVideo);
 }
 
-function playNextScene() {
-	video.src = sceneArr[videoCounter].startUrl;
+function firstEndedVideo() {
+	playBtn.classList.remove('d-n');
+	video.removeEventListener('ended', firstEndedVideo);
+}
+
+
+function playVideo() {
+	playBtn.classList.add('d-n');
 	video.play();
 	video.addEventListener('ended', endedVideo);
 }
 
 function endedVideo() {
-	playBtn.classList.remove('d-n');
+	video.addEventListener('ended', nextScene);
+	if (videoCounter >= sceneCounter) {
+		restartVideo();
+		return;
+	}
+	video.src = sceneArr[videoCounter].startUrl;
+	video.play();
+	//playBtn.classList.remove('d-n');
 	video.removeEventListener('ended', endedVideo);
+}
+
+function nextScene() {
+	playBtn.classList.remove('d-n');
+	video.removeEventListener('ended', nextScene);
+}
+
+function restartVideo() {
+	console.log('play agane');
 }
 
 /* video END*/
